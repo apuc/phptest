@@ -14,28 +14,15 @@ class Controller {
 
 //		var_dump($_POST);die;
 
-		$model = new Model( $db );
+		$model = new ModelBase( $db );
 
 		if ( ! empty( $_POST ) ) {
 			$model->load();
-//			$model->validate();
-			var_dump($model->validate());
 			var_dump($model);
-			die;
+			var_dump($model->save());
+			var_dump($model);
 		}
 //		var_dump($model);die;
-
-//		$model->first_name                 = "Олег";
-//		$model->last_name                  = "Засядько";
-//		$model->patronymic                 = "Валериевич";
-//		$model->year_of_birth              = 1980;
-//		$model->place_of_residence         = "г. Екатеринбург";
-//		$model->marital_status             = 1;
-//		$model->education                  = "полное высшее";
-//		$model->experience                 = "5 лет";
-//		$model->phone                      = "46565465";
-//		$model->email                      = "example.com";
-//		$model->information_about_yourself = "ksflskjdflksfkjsdfsdkfldsjfl";
 
 
 

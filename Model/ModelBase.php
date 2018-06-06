@@ -6,9 +6,10 @@
  * Time: 13:25
  */
 
+include( "DB/ActiveRecord.php" );
 
 /**
- * Class Model
+ * Class ModelBase
  *
  * @property int $id
  * @property $first_name
@@ -24,11 +25,12 @@
  * @property $information_about_yourself
  *
  */
-class Model {
+class ModelBase {
 
 	private $db;
 	private $arrayColumns;
 	private $arrayNameColumns = [];
+	private $errors = [];
 
 	public function __construct( DB_Connection $db ) {
 
@@ -87,17 +89,24 @@ class Model {
 					"experience",
 					"phone",
 					"email",
+					"year_of_birth",
 					"information_about_yourself"
 				],
 				"string"
 			],
 			[
 				[
-					"year_of_birth",
 					"id",
 					"marital_status"
 				],
 				"integer"
+			],
+
+			[
+				[
+					"email"
+				],
+				"unique"
 			]
 		];
 	}
@@ -128,8 +137,13 @@ class Model {
 		$value = implode( ", ", $value );
 
 
-		$query = "INSERT INTO {$this->db->getTable()} ({$columns}) VALUES ({$value})";
+//		$query = "INSERT INTO {$this->db->getTable()} ({$columns}) VALUES ({$value})";
 
+
+		$query = ActiveRecord::find()->insert( $this->db->getTable(), $columns, $value )->getQuery();
+
+
+//		var_dump($query);die;
 
 		return $this->db->getMysql()->query( $query );
 	}
@@ -150,8 +164,10 @@ class Model {
 	public function validate() {
 		foreach ( $this->rules() as $rule ) {
 			$nameFunction = $rule[1];
+
 			if ( $this->$nameFunction( $rule[0] ) !== true ) {
-				return $this->$nameFunction( $rule[0] );
+//				return $this->$nameFunction( $rule[0] );
+				return $this->errors;
 			}
 		}
 
@@ -169,11 +185,17 @@ class Model {
 	public function string( $arguments ) {
 		foreach ( $arguments as $argument ) {
 			if ( ! is_string( $this->$argument ) ) {
-				return "Ошибка в значении '{$this->getLabels($argument)}'. Значение должно быть строкой";
+				$this->errors[ $argument ] = "Ошибка в значении '{$this->getLabels($argument)}'. Значение должно быть строкой";
+
+				return false;
+//				return "Ошибка в значении '{$this->getLabels($argument)}'. Значение должно быть строкой";
 			}
 
 			if ( strlen( $this->$argument ) > 255 ) {
-				return "Ошибка в значении '{$this->getLabels($argument)}'. Значение должно содержать не более 255 символов";
+				$this->errors[ $argument ] = "Ошибка в значении '{$this->getLabels($argument)}'. Значение должно содержать не более 255 символов";
+
+				return false;
+//				return "Ошибка в значении '{$this->getLabels($argument)}'. Значение должно содержать не более 255 символов";
 			}
 		}
 
@@ -189,9 +211,37 @@ class Model {
 	 */
 	public function integer( $arguments ) {
 		foreach ( $arguments as $argument ) {
-			$this->$argument = (integer)$this->$argument;
+			$this->$argument = (integer) $this->$argument;
 			if ( ! is_int( $this->$argument ) ) {
-				return "Ошибка в значении '{$this->getLabels($argument)}'. Значение должно быть цифрой";
+				$this->errors[ $argument ] = "Ошибка в значении '{$this->getLabels($argument)}'. Значение должно быть цифрой";
+
+				return false;
+//				return "Ошибка в значении '{$this->getLabels($argument)}'. Значение должно быть цифрой";
+			}
+		}
+
+		return true;
+
+	}
+
+	/**
+	 * правило валидации для email
+	 *
+	 * @param $arguments
+	 *
+	 * @return bool|string
+	 */
+	public function unique( $arguments ) {
+		foreach ( $arguments as $argument ) {
+
+			$query  = ActiveRecord::find()->select( "*" )->table( $this->db->getTable() )->where( [ $argument => $this->$argument ] )->getQuery();
+			$result = $this->db->getMysql()->query( $query )->fetch_all();
+			if ( ! empty( $result ) ) {
+				$this->errors[ $argument ] = "Ошибка в значении '{$this->getLabels($argument)}'. Значение {$this->$argument} уже существует";
+
+				return false;
+
+//				return "Ошибка в значении '{$this->getLabels($argument)}'. Значение {$this->$argument} уже существует";
 			}
 		}
 
@@ -201,6 +251,7 @@ class Model {
 
 
 	public function load() {
+
 		foreach ( $_POST as $key => $item ) {
 			$this->$key = $item;
 		}

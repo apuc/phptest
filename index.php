@@ -1,11 +1,11 @@
 <?php
 
 include( "DB/DB_Connection.php" );
-include( "Model/Model.php" );
+include( "Model/ModelBase.php" );
 include("Controller/Controller.php");
 
 $db    = new DB_Connection( "localhost", "root", "sancho1995", "test-task2" );
-$model = new Model( $db );
+$model = new ModelBase( $db );
 $controller = new Controller($db);
 //var_dump( $model->getAll() );
 //var_dump($db);

@@ -5,7 +5,7 @@
  * Date: 05.06.18
  * Time: 16:05'
  * @var $data array
- * @var $model Model
+ * @var $model ModelBase
  */
 
 $model = $data[0];
@@ -118,7 +118,7 @@ $model = $data[0];
 
             <div class="form-group col-md-4">
                 <label for="phone"><?= $model->getLabels( "phone" ) ?></label>
-                <input name="phone" type="text" class="form-control"
+                <input name="phone" type="text" class="form-control" min="16"
                        value="<?= $model->phone ?>"/>
                 <div class="invalid-feedback">
                     Поле "<?= $model->getLabels( "phone" ) ?>" обязательно для заполнения
@@ -168,17 +168,22 @@ $model = $data[0];
 
         window.addEventListener('load', function () {
 
+            //валидация от бутстрапа
             $(".needs-validation").submit(function (e) {
 
-                // console.log(phone.val().length);
+                if (phone.val().indexOf("_") > 0) {
+                    var phoneVal = phone.val();
+                    phone.val(null);
+                }
 
                 if (phone.val().length === 0 && email.val().length === 0) {
                     phone.attr('required', 'required');
                     email.attr('required', 'required');
+                } else if(phone.val().length > 0 || email.val().length > 0){
+                    phone.removeAttribute('required');
+                    email.removeAttribute('required');
                 }
 
-                // console.log(phone.min());
-                if (phone.val().indexOf("_") > 0) phone.val(phone.val().slice(0, -1));
 
                 if ($(this)[0].checkValidity() === false) {
                     event.preventDefault();
@@ -189,6 +194,7 @@ $model = $data[0];
             });
 
 
+            //маска для телефона
             function setCursorPosition(pos, elem) {
                 elem.focus();
                 if (elem.setSelectionRange) elem.setSelectionRange(pos, pos);
@@ -220,6 +226,7 @@ $model = $data[0];
 
             phone[0].addEventListener("input", mask, false);
 
+            //активация маски при фокусе
             phone.focus(function () {
                 var val = "+38(___)___-____";
 
@@ -231,6 +238,7 @@ $model = $data[0];
 
             });
 
+            //деактивация маски при блуре, если пользователь не ввел свои значения
             phone.blur(function () {
                 var val = "+38(___)___-____";
 
