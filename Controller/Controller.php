@@ -7,6 +7,7 @@
  */
 include( "Parser.php" );
 include( "Model/Security.php" );
+include( "Model/UploadImage.php" );
 
 class Controller {
 
@@ -15,12 +16,14 @@ class Controller {
 
 //		var_dump($_POST);die;
 
-		$model       = new ModelBase( $db );
+		$model               = new ModelBase( $db );
 		$model->crsfSecurity = new Security();
 
 		if ( ! empty( $_POST ) ) {
 			if ( $model->crsfSecurity->validateCrsf() ) {
 				$model->load();
+				$image = new UploadImage();
+				$model->image = $image->getFileName();
 				$model->save();
 			} else {
 				$model->crsfSecurity->updateCrsf();

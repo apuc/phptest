@@ -23,7 +23,7 @@ $model = $data[0];
     <title>Document</title>
 </head>
 <body>
-<form role="form" action="../index.php" method="post" class="needs-validation" novalidate>
+<form role="form" action="../index.php" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
     <div class="container">
         <div class="row">
             <input type="hidden" name="crsf" value="<?= $model->crsfSecurity->getCrsf()?>">
@@ -142,6 +142,12 @@ $model = $data[0];
                     Поле "<?= $model->getLabels( "information_about_yourself" ) ?>" обязательно для заполнения
                 </div>
             </div>
+            <div class="form-group col-md-4">
+                <label for="file">Картинка</label>
+                <input name="file" type="file" class="form-control"/>
+
+            </div>
+
 
         </div>
         <div class="form-group">

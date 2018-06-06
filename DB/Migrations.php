@@ -34,7 +34,7 @@ class Migrations {
 		return $this;
 	}
 
-	public function string( $name, $length = 255, $notNull = true ) {
+	public function string( $name, $length = 255, $notNull = false ) {
 		$this->query .= "{$name} VARCHAR({$length}) {$this->notNull($notNull)}, ";
 
 		return $this;
@@ -50,13 +50,13 @@ class Migrations {
 		return $notNull;
 	}
 
-	public function int( $name, $length, $notNull = true ) {
+	public function int( $name, $length, $notNull = false ) {
 		$this->query .= "{$name} INT({$length}) {$this->notNull($notNull)}, ";
 
 		return $this;
 	}
 
-	public function text( $name, $notNull = true ) {
+	public function text( $name, $notNull = false ) {
 		$this->query .= "{$name} TEXT {$this->notNull($notNull)}, ";
 
 		return $this;

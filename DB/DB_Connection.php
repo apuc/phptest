@@ -35,7 +35,7 @@ class DB_Connection {
 	public function __construct( $host, $username, $password, $dbname, $port = null, $socket = null ) {
 
 		$this->mysql = new mysqli( $host, $username, $password, $dbname, $port, $socket );
-		$this->mysql->set_charset('utf8');
+		$this->mysql->set_charset( 'utf8' );
 
 
 		if ( $this->mysql->error ) {
@@ -99,16 +99,17 @@ class DB_Connection {
 
 		$query = $migrate->createTable( $tableName, [
 			$migrate->primaryKey( "id" ),
-			$migrate->string( "first_name", 255 ),
-			$migrate->string( "last_name", 255 ),
-			$migrate->string( "patronymic", 255 ),
-			$migrate->string( "year_of_birth", 255 ),
-			$migrate->string( "place_of_residence", 255 ),
+			$migrate->string( "first_name" ),
+			$migrate->string( "last_name" ),
+			$migrate->string( "patronymic" ),
+			$migrate->string( "year_of_birth" ),
+			$migrate->string( "place_of_residence" ),
+			$migrate->string( "image" ),
 			$migrate->int( "marital_status", 6 ),
-			$migrate->string( "education", 255 ),
-			$migrate->string( "experience", 255 ),
-			$migrate->string( "phone", 255, false ),
-			$migrate->string( "email", 255, false ),
+			$migrate->string( "education" ),
+			$migrate->string( "experience" ),
+			$migrate->string( "phone" ),
+			$migrate->string( "email" ),
 			$migrate->text( "information_about_yourself" )
 		] );
 

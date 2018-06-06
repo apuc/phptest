@@ -36,6 +36,7 @@ class ModelBase {
 	private $errors = [];
 	public $crsfSecurity;
 	public $crsf;
+	public $image;
 
 	public function __construct( DB_Connection $db ) {
 
