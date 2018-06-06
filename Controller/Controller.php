@@ -6,6 +6,7 @@
  * Time: 14:12
  */
 include( "Parser.php" );
+include( "Model/Security.php" );
 
 class Controller {
 
@@ -14,17 +15,17 @@ class Controller {
 
 //		var_dump($_POST);die;
 
-		$model = new ModelBase( $db );
+		$model       = new ModelBase( $db );
+		$model->crsfSecurity = new Security();
 
 		if ( ! empty( $_POST ) ) {
-			$model->load();
-			var_dump($model);
-			var_dump($model->save());
-			var_dump($model);
+			if ( $model->crsfSecurity->validateCrsf() ) {
+				$model->load();
+				$model->save();
+			} else {
+				$model->crsfSecurity->updateCrsf();
+			}
 		}
-//		var_dump($model);die;
-
-
 
 		return Parser::render( "views/form.php", [ $model ], true );
 

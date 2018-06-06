@@ -26,6 +26,7 @@ $model = $data[0];
 <form role="form" action="../index.php" method="post" class="needs-validation" novalidate>
     <div class="container">
         <div class="row">
+            <input type="hidden" name="crsf" value="<?= $model->crsfSecurity->getCrsf()?>">
             <div class="form-group col-md-4">
                 <label for="first_name"><?= $model->getLabels( "first_name" ) ?></label>
                 <input name="first_name" type="text" class="form-control"

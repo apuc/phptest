@@ -7,6 +7,7 @@
  */
 
 include( "DB/ActiveRecord.php" );
+//include ("Model/Security.php");
 
 /**
  * Class ModelBase
@@ -24,6 +25,8 @@ include( "DB/ActiveRecord.php" );
  * @property $email
  * @property $information_about_yourself
  *
+ * @property $crsfSecurity Security
+ *
  */
 class ModelBase {
 
@@ -31,6 +34,8 @@ class ModelBase {
 	private $arrayColumns;
 	private $arrayNameColumns = [];
 	private $errors = [];
+	public $crsfSecurity;
+	public $crsf;
 
 	public function __construct( DB_Connection $db ) {
 
