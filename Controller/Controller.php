@@ -22,8 +22,8 @@ class Controller {
 		if ( ! empty( $_POST ) ) {
 			if ( $model->crsfSecurity->validateCrsf() ) {
 				$model->load();
-				$image = new UploadImage();
-				$model->image = $image->getFileName();
+				$image = new UploadImage($model);
+				var_dump($model);die;
 				$model->save();
 			} else {
 				$model->crsfSecurity->updateCrsf();

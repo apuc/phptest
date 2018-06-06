@@ -83,7 +83,7 @@ $model = $data[0];
             <div class="form-group col-md-4">
                 <label for="place_of_residence"><?= $model->getLabels( "place_of_residence" ) ?></label>
                 <input name="place_of_residence" type="text" class="form-control"
-                       value="<?= $model->marital_status ?>" required/>
+                       value="<?= $model->place_of_residence ?>" required/>
                 <div class="invalid-feedback">
                     Поле "<?= $model->getLabels( "place_of_residence" ) ?>" обязательно для заполнения
                 </div>

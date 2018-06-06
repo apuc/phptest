@@ -24,6 +24,8 @@ include( "DB/ActiveRecord.php" );
  * @property $phone
  * @property $email
  * @property $information_about_yourself
+ * @property $image
+ * @property $imageFile
  *
  * @property $crsfSecurity Security
  *
@@ -37,6 +39,7 @@ class ModelBase {
 	public $crsfSecurity;
 	public $crsf;
 	public $image;
+	public $imageFile;
 
 	public function __construct( DB_Connection $db ) {
 
@@ -72,7 +75,9 @@ class ModelBase {
 			"experience"                 => "Опыт",
 			"phone"                      => "Телефон",
 			"email"                      => "E-mail",
-			"information_about_yourself" => "Информация о себе"
+			"information_about_yourself" => "Информация о себе",
+			"image"                      => "Картинка",
+			"imageFile"                  => "Картинка"
 		];
 
 		return isset( $labels[ $key ] ) ? $labels[ $key ] : $labels;
@@ -95,6 +100,7 @@ class ModelBase {
 					"experience",
 					"phone",
 					"email",
+//					"image",
 					"year_of_birth",
 					"information_about_yourself"
 				],
@@ -253,6 +259,10 @@ class ModelBase {
 
 		return true;
 
+	}
+
+	public function addError( $argument, $stringError ) {
+		$this->errors[ $argument ] = $stringError;
 	}
 
 

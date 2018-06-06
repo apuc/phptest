@@ -10,18 +10,27 @@ class UploadImage {
 
 	private $fileName;
 
-	public function __construct() {
+	public function __construct( ModelBase $model ) {
+
 		if ( ! empty( $_FILES ) ) {
 			$error = $_FILES["file"]["error"];
 			if ( $error > 0 ) {
-				return "ошибка сохранения файла";
+				$model->addError( "imageFile", "Ошибка сохранения файла: {$error}" );
+
+				return null;
 			}
+
 
 			$this->createDir();
 			$typeFile = $this->getTypeFile();
-			$this->setFileName( $typeFile );
-			$this->saveFile();
+			var_dump( $this->validateFile( $typeFile, $model ) );
+			if ( $this->validateFile( $typeFile, $model ) ) {
+				$this->setFileName( $typeFile );
+				$this->saveFile( $model );
+				$model->image = $this->fileName;
+			}
 			unset( $_FILES["file"] );
+
 		}
 
 		return null;
@@ -55,10 +64,56 @@ class UploadImage {
 		return md5( uniqid( rand(), true ) );
 	}
 
-	private function saveFile() {
+	private function saveFile( ModelBase $model ) {
 		if ( ! @copy( $_FILES['file']['tmp_name'], $this->getSrcSaveFile() ) ) {
-			echo "ошибка сохранения файла";
+			$model->addError( "imageFile", "Ошибка сохранения файла" );
 		}
+	}
+
+	/**
+	 * @param string $typeFile
+	 * @param ModelBase $model
+	 *
+	 * @return bool
+	 */
+	private function validateFile( $typeFile, $model ) {
+		$validateTypeFile = $this->validateTypeFile( $typeFile );
+		if ( $validateTypeFile !== true ) {
+			$model->addError( "imageFile", $validateTypeFile );
+
+			return false;
+		}
+
+		$validateSizeFile = $this->validateSizeFile();
+		if ( $validateSizeFile !== true ) {
+			$model->addError( "imageFile", $validateSizeFile );
+
+			return false;
+		}
+
+		return true;
+
+	}
+
+
+	private function validateTypeFile( $typeFile ) {
+		$types = [ ".jpg", ".png", ".gif" ];
+
+		foreach ( $types as $type ) {
+			if ( $type == $typeFile ) {
+				return true;
+			}
+		}
+
+		return "файл имеет недопустимое разрешение";
+	}
+
+	private function validateSizeFile() {
+		if ( $_FILES["file"]["size"] > 1000000 ) {
+			return "файл превышает допустимый размер";
+		}
+
+		return true;
 	}
 
 }
