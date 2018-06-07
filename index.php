@@ -2,12 +2,15 @@
 
 
 global $language;
+global $defaultLanguage;
+
+$defaultLanguage = "ru";
 
 //установка языка
 if ( isset( $_GET["lang"] ) && ! empty( $_GET["lang"] ) ) {
-	$language = $_GET()["lang"];
+	$language = $_GET["lang"];
 } else {
-	$language = "ru";
+	$language = "en";
 }
 
 

@@ -9,7 +9,8 @@
 class Language {
 
 	public static function trl( $language, $expression, $useVariable = true ) {
-		if ($language == "ru"){
+		global $defaultLanguage;
+		if ( self::getLanguage( $language ) == $defaultLanguage ) {
 			return $expression;
 		}
 		if ( $useVariable ) {
@@ -17,13 +18,22 @@ class Language {
 //		var_dump($matches);
 			$str = preg_replace( '/({([^>]+)})/U', '{test}', $expression );
 
-			$translate = self::getDictionary()[ $language ][ $str ];
+			$translate = self::getLanguage( $language )[ $str ];
 
 			return preg_replace( '/({([^>]+)})/U', $matches[2], $translate );
 		} else {
-			return preg_replace("\{[^\}]*\}", "", self::getDictionary()[ $language ][ $expression ]);
+			return preg_replace( "/\{[^\}]*\}/", "", self::getLanguage( $language )[ $expression ] );
 		}
 
+	}
+
+	private static function getLanguage( $language ) {
+		global $defaultLanguage;
+		if ( isset( self::getDictionary()[ $language ] ) ) {
+			return self::getDictionary()[ $language ];
+		}
+
+		return $defaultLanguage;
 	}
 
 	private static function getDictionary() {
