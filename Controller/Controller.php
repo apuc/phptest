@@ -11,6 +11,13 @@ include( "Model/UploadImage.php" );
 
 class Controller {
 
+	/**
+	 * Controller constructor.
+	 *
+	 * @param DB_Connection $db
+	 *
+	 * @throws Exception
+	 */
 	public function __construct( DB_Connection $db ) {
 
 

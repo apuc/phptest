@@ -223,6 +223,28 @@ class ModelBase {
 		return true;
 	}
 
+	/**
+	 * получить определенную ошибку из общего массива ошибок
+	 *
+	 * @param $argument
+	 *
+	 * @return mixed
+	 */
+	public function getError( $argument ) {
+		return $this->errors[ $argument ];
+	}
+
+	/**
+	 * проверить наличие ошибки в массиве
+	 *
+	 * @param $argument
+	 *
+	 * @return bool
+	 */
+	public function isError( $argument ) {
+		return array_key_exists( $argument, $this->errors );
+	}
+
 
 	/**
 	 * правило валидации для строковых переменных

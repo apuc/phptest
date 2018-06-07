@@ -14,6 +14,9 @@ class UploadImage {
 
 		if ( ! empty( $_FILES ) ) {
 			$error = $_FILES["file"]["error"];
+			if ( $error == 4 ) {
+				return null;
+			}
 			if ( $error > 0 ) {
 				$model->addError( "imageFile", "Ошибка сохранения файла: {$error}" );
 
@@ -23,7 +26,7 @@ class UploadImage {
 
 			$this->createDir();
 			$typeFile = $this->getTypeFile();
-			var_dump( $this->validateFile( $typeFile, $model ) );
+//			var_dump( $this->validateFile( $typeFile, $model ) );
 			if ( $this->validateFile( $typeFile, $model ) ) {
 				$this->setFileName( $typeFile );
 				$this->saveFile( $model );
@@ -128,6 +131,7 @@ class UploadImage {
 
 	/**
 	 * валидирует файл по типу
+	 *
 	 * @param string $typeFile
 	 * @param ModelBase $model
 	 *
@@ -155,12 +159,23 @@ class UploadImage {
 	 */
 	private function validateSizeFile( ModelBase $model ) {
 		if ( $_FILES["file"]["size"] > 1000000 ) {
-			$model->addError( "imageFile", "Файл превышает допустимый размер" );
+			$model->addError( "imageFile", "Файл превышает допустимый размер. Можно загрузить файл до 1 мб" );
 
 			return false;
 		}
 
 		return true;
+	}
+
+	/**
+	 * проверка на пустой файл
+	 *
+	 * @param int $error
+	 *
+	 * @return bool
+	 */
+	private function isEmptyFile( $error ) {
+		return ( $error == 4 );
 	}
 
 }

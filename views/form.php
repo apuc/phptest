@@ -9,7 +9,6 @@
  */
 
 $model = $data[0];
-//var_dump($model->getLabels())
 ?>
 <!doctype html>
 <html lang="ru">
@@ -23,7 +22,8 @@ $model = $data[0];
     <title>Document</title>
 </head>
 <body>
-<form role="form" action="../index.php" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+<form id="form" role="form" action="../index.php" method="post" class="needs-validation" novalidate
+      enctype="multipart/form-data">
     <div class="container">
         <div class="row">
             <input type="hidden" name="crsf" value="<?= $model->crsfSecurity->getCrsf() ?>">
@@ -119,18 +119,32 @@ $model = $data[0];
 
             <div class="form-group col-md-4">
                 <label for="phone"><?= $model->getLabels( "phone" ) ?></label>
-                <input name="phone" type="text" class="form-control" min="16"
-                       value="<?= $model->phone ?>"/>
+                <input name="phone" type="text"
+                       class="form-control <?php if ( $model->isError( "phone" ) ): ?>form-control-invalid<?php endif; ?>"
+                       min="16"
+                       value="<?= ( $model->isError( "phone" ) ) ? "" : $model->phone ?>"/>
                 <div class="invalid-feedback">
-                    Поле "<?= $model->getLabels( "phone" ) ?>" обязательно для заполнения
+
+					<?php if ( $model->isError( "phone" ) ): ?>
+						<?= trim( $model->getError( "phone" ) ) ?>
+					<?php else: ?>
+                        Поле "<?= $model->getLabels( "phone" ) ?>" обязательно для заполнения
+					<?php endif; ?>
                 </div>
             </div>
 
             <div class="form-group col-md-4">
                 <label for="email"><?= $model->getLabels( "email" ) ?></label>
-                <input name="email" type="email" class="form-control" value="<?= $model->email ?>"/>
+                <input name="email" type="email"
+                       class="form-control <?php if ( $model->isError( "email" ) ): ?>form-control-invalid<?php endif; ?>"
+                       value="<?= $model->email ?>"/>
                 <div class="invalid-feedback">
-                    Укажите Ваш email
+
+					<?php if ( $model->isError( "email" ) ): ?>
+						<?= trim( $model->getError( "email" ) ) ?>
+					<?php else: ?>
+                        Укажите Ваш email
+					<?php endif; ?>
                 </div>
             </div>
 
@@ -143,9 +157,14 @@ $model = $data[0];
                 </div>
             </div>
             <div class="form-group col-md-4">
-                <label for="file">Картинка</label>
-                <input name="file" type="file" class="form-control"/>
-
+                <label for="file"><?= $model->getLabels( "image" ) ?></label>
+                <input name="file" type="file"
+                       class="form-control <?php if ( $model->isError( "imageFile" ) ): ?>form-control-invalid<?php endif; ?>"/>
+				<?php if ( $model->isError( "imageFile" ) ): ?>
+                    <div class="invalid-feedback">
+						<?= $model->getError( "imageFile" ) ?>
+                    </div>
+				<?php endif; ?>
             </div>
 
 
@@ -171,7 +190,8 @@ $model = $data[0];
         'use strict';
 
         var phone = $("input[name=phone]"),
-            email = $("input[name=email]");
+            email = $("input[name=email]"),
+            input = $("#form").find('input');
 
         window.addEventListener('load', function () {
 
@@ -180,26 +200,27 @@ $model = $data[0];
 
                 if (phone.val().indexOf("_") > 0) {
                     var phoneVal = phone.val();
-                    phone.val(null);
+                    phone.val("");
                 }
 
+                //
                 if (phone.val().length === 0 && email.val().length === 0) {
                     phone.attr('required', 'required');
                     email.attr('required', 'required');
                 } else if (phone.val().length > 0 || email.val().length > 0) {
-                    phone.removeAttribute('required');
-                    email.removeAttribute('required');
+                    phone.removeAttr('required');
+                    email.removeAttr('required');
+
                 }
 
                 if ($(this)[0].checkValidity() === false) {
                     event.preventDefault();
                     event.stopPropagation();
                 }
-
+                //
                 $(this).addClass("was-validated");
-                // return false;
-            });
 
+            });
 
             //маска для телефона
             function setCursorPosition(pos, elem) {
@@ -215,7 +236,6 @@ $model = $data[0];
             }
 
             function mask(event) {
-                console.log(this.defaultValue);
                 var matrix = this.defaultValue,
                     i = 0,
                     def = matrix.replace(/\D/g, ""),
@@ -232,6 +252,7 @@ $model = $data[0];
 
 
             phone[0].addEventListener("input", mask, false);
+
 
             //активация маски при фокусе
             phone.focus(function () {
@@ -251,12 +272,23 @@ $model = $data[0];
 
                 if ($(this).val() === val) $(this).val("");
 
-            })
+            });
+
+
+            if (input.hasClass("form-control-invalid")) {
+                $(".form-control-invalid").next().show();
+            }
 
 
         }, false);
     })();
 </script>
+
+<style>
+    .form-control-invalid {
+        border: 1px solid #dc3545;
+    }
+</style>
 
 </body>
 </html>
