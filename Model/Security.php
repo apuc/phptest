@@ -21,6 +21,8 @@ class Security {
 	 */
 	public function __construct() {
 		session_start();
+//		var_dump(time());
+//		var_dump($_SESSION);die;
 		if ( ! $this->validateCreatedAt() ) {
 			$this->updateCrsf();
 		}

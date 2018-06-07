@@ -20,24 +20,24 @@ class Controller {
 	 */
 	public function __construct( DB_Connection $db ) {
 
-
-//		var_dump($_POST);die;
-
 		$model               = new ModelBase( $db );
 		$model->crsfSecurity = new Security();
+		$viewModal = false;
 
 		if ( ! empty( $_POST ) ) {
 			if ( $model->crsfSecurity->validateCrsf() ) {
 				$model->load();
-				$image = new UploadImage($model);
+				$image = new UploadImage( $model );
 				$model->save();
 			} else {
 				$model->crsfSecurity->updateCrsf();
+				$viewModal = true;
 			}
 		}
+
 //		var_dump($model);
 
-		return Parser::render( "views/form.php", [ $model ], true );
+		return Parser::render( "views/form.php", [ $model, $viewModal ], true );
 
 
 	}
