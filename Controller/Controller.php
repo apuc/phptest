@@ -34,7 +34,6 @@ class Controller {
 				$viewModal = true;
 			}
 		}
-
 //		var_dump($model);
 
 		return Parser::render( "views/form.php", [ $model, $viewModal ], true );

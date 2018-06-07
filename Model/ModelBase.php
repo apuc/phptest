@@ -7,6 +7,7 @@
  */
 
 include( "DB/ActiveRecord.php" );
+include( "Model/Language.php" );
 //include ("Model/Security.php");
 
 /**
@@ -81,22 +82,22 @@ class ModelBase {
 	 * @return array|mixed
 	 */
 	public function getLabels( $key = null ) {
+		global $language;
 		$labels = [
-			"first_name"                 => "Имя",
-			"last_name"                  => "Фамилия",
-			"patronymic"                 => "Отчество",
-			"year_of_birth"              => "Год рождения",
-			"place_of_residence"         => "Место проживания",
-			"marital_status"             => "Семейное положение",
-			"education"                  => "Образование",
-			"experience"                 => "Опыт",
-			"phone"                      => "Телефон",
-			"email"                      => "E-mail",
-			"information_about_yourself" => "Информация о себе",
-			"image"                      => "Картинка",
-			"imageFile"                  => "Картинка"
+			"first_name"                 => Language::trl($language, "Имя", false),
+			"last_name"                  => Language::trl($language, "Фамилия", false),
+			"patronymic"                 => Language::trl($language, "Отчество", false),
+			"year_of_birth"              => Language::trl($language, "Год рождения", false),
+			"place_of_residence"         => Language::trl($language, "Место проживания", false),
+			"marital_status"             => Language::trl($language, "Семейное положение", false),
+			"education"                  => Language::trl($language, "Образование", false),
+			"experience"                 => Language::trl($language, "Опыт", false),
+			"phone"                      => Language::trl($language, "Телефон", false),
+			"email"                      => Language::trl($language, "E-mail", false),"",
+			"information_about_yourself" => Language::trl($language, "Информация о себе", false),
+			"image"                      => Language::trl($language, "Картинка", false),
+			"imageFile"                  => Language::trl($language, "Картинка", false),
 		];
-
 		return isset( $labels[ $key ] ) ? $labels[ $key ] : $labels;
 	}
 

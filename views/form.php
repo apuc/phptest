@@ -8,7 +8,9 @@
  * @var $model ModelBase
  */
 
-$model = $data[0];
+//include( "Model/Language.php" );
+global $language;
+$model     = $data[0];
 $viewModal = $data[1];
 ?>
 <!doctype html>
@@ -33,7 +35,9 @@ $viewModal = $data[1];
                 <input name="first_name" type="text" class="form-control"
                        value="<?= $model->first_name ?>" required/>
                 <div class="invalid-feedback">
-                    Поле "<?= $model->getLabels( "first_name" ) ?>" обязательно для заполнения
+
+					<?= Language::trl( $language, "Поле {" . $model->getLabels( "first_name" ) . "} обязательно для заполнения" ) ?>
+
                 </div>
             </div>
 
@@ -42,7 +46,7 @@ $viewModal = $data[1];
                 <input name="last_name" type="text" class="form-control"
                        value="<?= $model->last_name ?>" required/>
                 <div class="invalid-feedback">
-                    Поле "<?= $model->getLabels( "last_name" ) ?>" обязательно для заполнения
+					<?= Language::trl( $language, "Поле {" . $model->getLabels( "last_name" ) . "} обязательно для заполнения" ) ?>
                 </div>
             </div>
 
@@ -51,7 +55,7 @@ $viewModal = $data[1];
                 <input name="patronymic" type="text" class="form-control"
                        value="<?= $model->patronymic ?>" required/>
                 <div class="invalid-feedback">
-                    Поле "<?= $model->getLabels( "patronymic" ) ?>" обязательно для заполнения
+					<?= Language::trl( $language, "Поле {" . $model->getLabels( "patronymic" ) . "} обязательно для заполнения" ) ?>
                 </div>
             </div>
 
@@ -60,7 +64,7 @@ $viewModal = $data[1];
                 <input name="year_of_birth" type="date" class="form-control"
                        value="<?= $model->year_of_birth ?>" required/>
                 <div class="invalid-feedback">
-                    Поле "<?= $model->getLabels( "year_of_birth" ) ?>" обязательно для заполнения
+					<?= Language::trl( $language, "Поле {" . $model->getLabels( "year_of_birth" ) . "} обязательно для заполнения" ) ?>
                 </div>
             </div>
 
@@ -77,7 +81,7 @@ $viewModal = $data[1];
                 </select>
 
                 <div class="invalid-feedback">
-                    Поле "<?= $model->getLabels( "marital_status" ) ?>" обязательно для заполнения
+					<?= Language::trl( $language, "Поле {" . $model->getLabels( "marital_status" ) . "} обязательно для заполнения" ) ?>
                 </div>
             </div>
 
@@ -86,7 +90,7 @@ $viewModal = $data[1];
                 <input name="place_of_residence" type="text" class="form-control"
                        value="<?= $model->place_of_residence ?>" required/>
                 <div class="invalid-feedback">
-                    Поле "<?= $model->getLabels( "place_of_residence" ) ?>" обязательно для заполнения
+					<?= Language::trl( $language, "Поле {" . $model->getLabels( "place_of_residence" ) . "} обязательно для заполнения" ) ?>
                 </div>
             </div>
 
@@ -105,7 +109,7 @@ $viewModal = $data[1];
 
 
                 <div class="invalid-feedback">
-                    Поле "<?= $model->getLabels( "education" ) ?>" обязательно для заполнения
+					<?= Language::trl( $language, "Поле {" . $model->getLabels( "education" ) . "} обязательно для заполнения" ) ?>
                 </div>
             </div>
 
@@ -114,7 +118,7 @@ $viewModal = $data[1];
                 <input name="experience" type="text" class="form-control"
                        value="<?= $model->experience ?>" required/>
                 <div class="invalid-feedback">
-                    Поле "<?= $model->getLabels( "experience" ) ?>" обязательно для заполнения
+					<?= Language::trl( $language, "Поле {" . $model->getLabels( "experience" ) . "} обязательно для заполнения" ) ?>
                 </div>
             </div>
 
@@ -129,7 +133,7 @@ $viewModal = $data[1];
 					<?php if ( $model->isError( "phone" ) ): ?>
 						<?= trim( $model->getError( "phone" ) ) ?>
 					<?php else: ?>
-                        Поле "<?= $model->getLabels( "phone" ) ?>" обязательно для заполнения
+						<?= Language::trl( $language, "Поле {" . $model->getLabels( "phone" ) . "} обязательно для заполнения" ) ?>
 					<?php endif; ?>
                 </div>
             </div>
@@ -154,7 +158,7 @@ $viewModal = $data[1];
                 <input name="information_about_yourself" type="text" class="form-control"
                        value="<?= $model->information_about_yourself ?>" required/>
                 <div class="invalid-feedback">
-                    Поле "<?= $model->getLabels( "information_about_yourself" ) ?>" обязательно для заполнения
+					<?= Language::trl( $language, "Поле {" . $model->getLabels( "information_about_yourself" ) . "} обязательно для заполнения" ) ?>
                 </div>
             </div>
             <div class="form-group col-md-4">
