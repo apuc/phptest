@@ -10,6 +10,7 @@
 
 //include( "Model/Language.php" );
 global $language;
+global $defaultLanguage;
 $model     = $data[0];
 $viewModal = $data[1];
 ?>
@@ -176,9 +177,14 @@ $viewModal = $data[1];
         </div>
         <div class="form-group">
             <input type="submit" class="btn btn-info" value="Отправить"/>
+			<?php if ( $language == $defaultLanguage ): ?>
+                <a href="/?lang=en" class="btn btn-primary">Переключить на английский</a>
+			<?php else: ?>
+				<?php $language = "en" ?>
+                <a href="/?lang=ru" class="btn btn-primary">Переключить на русский</a>
+			<?php endif; ?>
         </div>
     </div>
-
 </form>
 
 <!--<div class="container">

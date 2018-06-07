@@ -10,7 +10,7 @@ $defaultLanguage = "ru";
 if ( isset( $_GET["lang"] ) && ! empty( $_GET["lang"] ) ) {
 	$language = $_GET["lang"];
 } else {
-	$language = "en";
+	$language = "ru";
 }
 
 
