@@ -13,21 +13,38 @@ include( "DB/ActiveRecord.php" );
  * Class ModelBase
  *
  * @property int $id
- * @property $first_name
- * @property $last_name
- * @property $patronymic
- * @property $year_of_birth
- * @property $place_of_residence
- * @property $marital_status
- * @property $education
- * @property $experience
- * @property $phone
- * @property $email
- * @property $information_about_yourself
- * @property $image
- * @property $imageFile
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $patronymic
+ * @property string $year_of_birth
+ * @property string $place_of_residence
+ * @property int $marital_status
+ * @property int $education
+ * @property string $experience
+ * @property string $phone
+ * @property string $email
+ * @property string $information_about_yourself
+ * @property string $image
  *
+ *
+ *
+ * @property $imageFile
+ * в свойство $imageFile записываются все ошибки связанные с валидацией картинки
+ *
+ * @property $crsf
  * @property $crsfSecurity Security
+ *
+ * свойства $crsf, $crsfSecurity нужны для работы crsf защиты
+ *
+ *
+ * @property array $errors
+ * массив с ошибками валидации
+ *
+ * @property DB_Connection $db экземпляр класса соединения с базой данных
+ *
+ * @property array $arrayColumns массив колонок, которые есть в таблице
+ *
+ * @property array $arrayNameColumns массив с именем колонок таблицы
  *
  */
 class ModelBase {
@@ -116,15 +133,23 @@ class ModelBase {
 
 			[
 				[
-					"email"
+					"email",
+					"phone"
 				],
 				"unique"
+			],
+
+			[
+				[
+					"imageFile"
+				],
+				"image"
 			]
 		];
 	}
 
 	/**
-	 * сохранение строчки
+	 * сохранение данных в бд
 	 * @return bool|mysqli_result
 	 */
 	public function save() {
@@ -168,19 +193,31 @@ class ModelBase {
 		return $this->db->getMySqlResult( $this->db->getTable() )->fetch_all();
 	}
 
+	/**
+	 * получить массив с названиями колонок
+	 * @return array
+	 */
 	public function getArrayNameColumns() {
 		return $this->arrayNameColumns;
 	}
 
-
+	/**
+	 * валидация полей, в случае ошибки выводит массив с ошибками
+	 * @return array|bool
+	 */
 	public function validate() {
 		foreach ( $this->rules() as $rule ) {
 			$nameFunction = $rule[1];
 
-			if ( $this->$nameFunction( $rule[0] ) !== true ) {
-//				return $this->$nameFunction( $rule[0] );
-				return $this->errors;
-			}
+//			if ( $this->$nameFunction( $rule[0] ) !== true ) {
+////				return $this->$nameFunction( $rule[0] );
+//				return $this->errors;
+//			}
+			$this->$nameFunction( $rule[0] );
+		}
+
+		if ( ! empty( $this->errors ) ) {
+			return $this->errors;
 		}
 
 		return true;
@@ -237,7 +274,7 @@ class ModelBase {
 	}
 
 	/**
-	 * правило валидации для email
+	 * правило валидации для уникального значения
 	 *
 	 * @param $arguments
 	 *
@@ -261,11 +298,37 @@ class ModelBase {
 
 	}
 
+	/**
+	 * правило валидации для картинки
+	 *
+	 * @param $arguments
+	 *
+	 * @return bool|mixed
+	 */
+	public function image( $arguments ) {
+		foreach ( $arguments as $argument ) {
+			if ( isset( $this->errors[ $argument ] ) ) {
+				return $this->errors[ $argument ];
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * добавление своих ошибок
+	 *
+	 * @param $argument
+	 * @param $stringError
+	 */
 	public function addError( $argument, $stringError ) {
 		$this->errors[ $argument ] = $stringError;
 	}
 
 
+	/**
+	 * загрузка данных в модель
+	 */
 	public function load() {
 
 		foreach ( $_POST as $key => $item ) {

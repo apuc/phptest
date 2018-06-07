@@ -28,18 +28,38 @@ class Migrations {
 	}
 
 
+	/**
+	 * @param $name
+	 *
+	 * @return $this
+	 */
 	public function primaryKey( $name ) {
 		$this->query .= "{$name} INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, ";
 
 		return $this;
 	}
 
+	/**
+	 * генерация строкового столбца
+	 * @param $name
+	 * @param int $length
+	 * @param bool $notNull
+	 *
+	 * @return $this
+	 */
 	public function string( $name, $length = 255, $notNull = false ) {
 		$this->query .= "{$name} VARCHAR({$length}) {$this->notNull($notNull)}, ";
 
 		return $this;
 	}
 
+	/**
+	 * указывает будет ли столбец равнятся null или нет
+	 *
+	 * @param bool $isNotNull
+	 *
+	 * @return string
+	 */
 	public function notNull( $isNotNull ) {
 		if ( $isNotNull ) {
 			$notNull = "NOT NULL";
@@ -50,12 +70,28 @@ class Migrations {
 		return $notNull;
 	}
 
+	/**
+	 * генерация числового столбца
+	 *
+	 * @param $name
+	 * @param $length
+	 * @param bool $notNull
+	 *
+	 * @return $this
+	 */
 	public function int( $name, $length, $notNull = false ) {
 		$this->query .= "{$name} INT({$length}) {$this->notNull($notNull)}, ";
 
 		return $this;
 	}
 
+	/**
+	 * генерация текстового столбца
+	 * @param $name
+	 * @param bool $notNull
+	 *
+	 * @return $this
+	 */
 	public function text( $name, $notNull = false ) {
 		$this->query .= "{$name} TEXT {$this->notNull($notNull)}, ";
 

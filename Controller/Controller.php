@@ -23,12 +23,12 @@ class Controller {
 			if ( $model->crsfSecurity->validateCrsf() ) {
 				$model->load();
 				$image = new UploadImage($model);
-				var_dump($model);die;
 				$model->save();
 			} else {
 				$model->crsfSecurity->updateCrsf();
 			}
 		}
+//		var_dump($model);
 
 		return Parser::render( "views/form.php", [ $model ], true );
 

@@ -26,7 +26,7 @@ $model = $data[0];
 <form role="form" action="../index.php" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
     <div class="container">
         <div class="row">
-            <input type="hidden" name="crsf" value="<?= $model->crsfSecurity->getCrsf()?>">
+            <input type="hidden" name="crsf" value="<?= $model->crsfSecurity->getCrsf() ?>">
             <div class="form-group col-md-4">
                 <label for="first_name"><?= $model->getLabels( "first_name" ) ?></label>
                 <input name="first_name" type="text" class="form-control"
@@ -176,7 +176,7 @@ $model = $data[0];
         window.addEventListener('load', function () {
 
             //валидация от бутстрапа
-            $(".needs-validation").submit(function (e) {
+            $(".needs-validation").submit(function (event) {
 
                 if (phone.val().indexOf("_") > 0) {
                     var phoneVal = phone.val();
@@ -186,11 +186,10 @@ $model = $data[0];
                 if (phone.val().length === 0 && email.val().length === 0) {
                     phone.attr('required', 'required');
                     email.attr('required', 'required');
-                } else if(phone.val().length > 0 || email.val().length > 0){
+                } else if (phone.val().length > 0 || email.val().length > 0) {
                     phone.removeAttribute('required');
                     email.removeAttribute('required');
                 }
-
 
                 if ($(this)[0].checkValidity() === false) {
                     event.preventDefault();
@@ -198,6 +197,7 @@ $model = $data[0];
                 }
 
                 $(this).addClass("was-validated");
+                // return false;
             });
 
 

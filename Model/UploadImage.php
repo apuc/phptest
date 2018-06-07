@@ -38,32 +38,64 @@ class UploadImage {
 	}
 
 
+	/**
+	 * получить имя файла картинки
+	 *
+	 * @return string
+	 */
 	public function getFileName() {
 		return $this->fileName;
 	}
 
+	/**
+	 * установить имя файла картинки
+	 *
+	 * @param string $typeFile
+	 */
 	private function setFileName( $typeFile ) {
 		$this->fileName = $this->generateRandomString() . $typeFile;
 	}
 
+	/**
+	 * создать директорию для хранения картинок
+	 */
 	private function createDir() {
 		if ( ! file_exists( "image" ) ) {
 			mkdir( "image" );
 		}
 	}
 
+	/**
+	 * получить расширение загруженного файла
+	 * @return bool|string
+	 */
 	private function getTypeFile() {
 		return ( substr( $_FILES['file']['name'], strrpos( $_FILES['file']['name'], "." ) ) );
 	}
 
+	/**
+	 * получить путь хранения файла
+	 *
+	 * @return string
+	 */
 	private function getSrcSaveFile() {
 		return "image/" . $this->fileName;
 	}
 
+	/**
+	 * генерация случайной строки для названия картинки
+	 *
+	 * @return string
+	 */
 	private function generateRandomString() {
 		return md5( uniqid( rand(), true ) );
 	}
 
+	/**
+	 * сохранить файл
+	 *
+	 * @param ModelBase $model
+	 */
 	private function saveFile( ModelBase $model ) {
 		if ( ! @copy( $_FILES['file']['tmp_name'], $this->getSrcSaveFile() ) ) {
 			$model->addError( "imageFile", "Ошибка сохранения файла" );
@@ -71,24 +103,22 @@ class UploadImage {
 	}
 
 	/**
+	 * валидация
+	 *
 	 * @param string $typeFile
 	 * @param ModelBase $model
 	 *
 	 * @return bool
 	 */
 	private function validateFile( $typeFile, $model ) {
-		$validateTypeFile = $this->validateTypeFile( $typeFile );
-		if ( $validateTypeFile !== true ) {
-			$model->addError( "imageFile", $validateTypeFile );
-
-			return false;
+		$validateTypeFile = $this->validateTypeFile( $typeFile, $model );
+		if ( $validateTypeFile === false ) {
+			return $validateTypeFile;
 		}
 
-		$validateSizeFile = $this->validateSizeFile();
-		if ( $validateSizeFile !== true ) {
-			$model->addError( "imageFile", $validateSizeFile );
-
-			return false;
+		$validateSizeFile = $this->validateSizeFile( $model );
+		if ( $validateSizeFile === false ) {
+			return $validateSizeFile;
 		}
 
 		return true;
@@ -96,7 +126,14 @@ class UploadImage {
 	}
 
 
-	private function validateTypeFile( $typeFile ) {
+	/**
+	 * валидирует файл по типу
+	 * @param string $typeFile
+	 * @param ModelBase $model
+	 *
+	 * @return bool
+	 */
+	private function validateTypeFile( $typeFile, ModelBase $model ) {
 		$types = [ ".jpg", ".png", ".gif" ];
 
 		foreach ( $types as $type ) {
@@ -104,13 +141,23 @@ class UploadImage {
 				return true;
 			}
 		}
+		$model->addError( "imageFile", "Файл имеет недопустимое разрешение" );
 
-		return "файл имеет недопустимое разрешение";
+		return false;
 	}
 
-	private function validateSizeFile() {
+	/**
+	 * валидация файла по размеру
+	 *
+	 * @param ModelBase $model
+	 *
+	 * @return bool
+	 */
+	private function validateSizeFile( ModelBase $model ) {
 		if ( $_FILES["file"]["size"] > 1000000 ) {
-			return "файл превышает допустимый размер";
+			$model->addError( "imageFile", "Файл превышает допустимый размер" );
+
+			return false;
 		}
 
 		return true;
