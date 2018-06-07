@@ -12,13 +12,14 @@ class UploadImage {
 
 	public function __construct( ModelBase $model ) {
 
+		global $language;
 		if ( ! empty( $_FILES ) ) {
 			$error = $_FILES["file"]["error"];
 			if ( $error == 4 ) {
 				return null;
 			}
 			if ( $error > 0 ) {
-				$model->addError( "imageFile", "Ошибка сохранения файла: {$error}" );
+				$model->addError( "imageFile", Language::trl( $language, "Ошибка сохранения файла: {{$error}}" ) );
 
 				return null;
 			}
@@ -138,6 +139,7 @@ class UploadImage {
 	 * @return bool
 	 */
 	private function validateTypeFile( $typeFile, ModelBase $model ) {
+		global $language;
 		$types = [ ".jpg", ".png", ".gif" ];
 
 		foreach ( $types as $type ) {
@@ -145,7 +147,7 @@ class UploadImage {
 				return true;
 			}
 		}
-		$model->addError( "imageFile", "Файл имеет недопустимое разрешение" );
+		$model->addError( "imageFile", Language::trl( $language, "Файл имеет недопустимое разрешение", false ) );
 
 		return false;
 	}
@@ -158,8 +160,9 @@ class UploadImage {
 	 * @return bool
 	 */
 	private function validateSizeFile( ModelBase $model ) {
+		global $language;
 		if ( $_FILES["file"]["size"] > 1000000 ) {
-			$model->addError( "imageFile", "Файл превышает допустимый размер. Можно загрузить файл до 1 мб" );
+			$model->addError( "imageFile", Language::trl( $language, "Файл превышает допустимый размер. Можно загрузить файл до 1 мб", false ) );
 
 			return false;
 		}

@@ -84,20 +84,22 @@ class ModelBase {
 	public function getLabels( $key = null ) {
 		global $language;
 		$labels = [
-			"first_name"                 => Language::trl($language, "Имя", false),
-			"last_name"                  => Language::trl($language, "Фамилия", false),
-			"patronymic"                 => Language::trl($language, "Отчество", false),
-			"year_of_birth"              => Language::trl($language, "Год рождения", false),
-			"place_of_residence"         => Language::trl($language, "Место проживания", false),
-			"marital_status"             => Language::trl($language, "Семейное положение", false),
-			"education"                  => Language::trl($language, "Образование", false),
-			"experience"                 => Language::trl($language, "Опыт", false),
-			"phone"                      => Language::trl($language, "Телефон", false),
-			"email"                      => Language::trl($language, "E-mail", false),"",
-			"information_about_yourself" => Language::trl($language, "Информация о себе", false),
-			"image"                      => Language::trl($language, "Картинка", false),
-			"imageFile"                  => Language::trl($language, "Картинка", false),
+			"first_name"                 => Language::trl( $language, "Имя", false ),
+			"last_name"                  => Language::trl( $language, "Фамилия", false ),
+			"patronymic"                 => Language::trl( $language, "Отчество", false ),
+			"year_of_birth"              => Language::trl( $language, "Год рождения", false ),
+			"place_of_residence"         => Language::trl( $language, "Место проживания", false ),
+			"marital_status"             => Language::trl( $language, "Семейное положение", false ),
+			"education"                  => Language::trl( $language, "Образование", false ),
+			"experience"                 => Language::trl( $language, "Опыт", false ),
+			"phone"                      => Language::trl( $language, "Телефон", false ),
+			"email"                      => Language::trl( $language, "E-mail", false ),
+			"",
+			"information_about_yourself" => Language::trl( $language, "Информация о себе", false ),
+			"image"                      => Language::trl( $language, "Картинка", false ),
+			"imageFile"                  => Language::trl( $language, "Картинка", false ),
 		];
+
 		return isset( $labels[ $key ] ) ? $labels[ $key ] : $labels;
 	}
 
@@ -304,12 +306,13 @@ class ModelBase {
 	 * @return bool|string
 	 */
 	public function unique( $arguments ) {
+		global $language;
 		foreach ( $arguments as $argument ) {
 
 			$query  = ActiveRecord::find()->select( "*" )->table( $this->db->getTable() )->where( [ $argument => $this->$argument ] )->getQuery();
 			$result = $this->db->getMysql()->query( $query )->fetch_all();
 			if ( ! empty( $result ) ) {
-				$this->errors[ $argument ] = "Ошибка в значении '{$this->getLabels($argument)}'. Значение {$this->$argument} уже существует";
+				$this->errors[ $argument ] = Language::trl( $language, "Ошибка в значении {'{$this->getLabels($argument)}'}. Значение <{$this->$argument}> уже существует", true, true );
 
 				return false;
 
