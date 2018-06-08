@@ -15,9 +15,9 @@ if ( isset( $_GET["lang"] ) && ! empty( $_GET["lang"] ) ) {
 
 
 
-include( "DB/DB_Connection.php" );
-include( "Model/ModelBase.php" );
-include( "Controller/Controller.php" );
+require_once( "DB/DB_Connection.php" );
+require_once( "Model/ModelBase.php" );
+require_once( "Controller/Controller.php" );
 
 $db         = new DB_Connection( "localhost", "root", "sancho1995", "test-task2" );
 $model      = new ModelBase( $db );

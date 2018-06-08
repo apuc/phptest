@@ -96,7 +96,7 @@ class Language {
 
 			"en" => [
 				"Поле {columnName} обязательно для заполнения"                          => "Required field {columnName}",
-				"Ошибка в значении {columnName}. Значение <columnValue> уже существует" => "Error in field {columnName}. Value <columnValue> already exist.",
+				"Ошибка в значении {columnName}. Значение <columnValue> уже существует. Введите другое значение." => "Error in field {columnName}. Value <columnValue> already exist. Insert other value.",
 				"Имя"                                                                   => "Name",
 				"Фамилия"                                                               => "Surname",
 				"Отчество"                                                              => "Patronymic",

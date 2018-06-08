@@ -5,9 +5,9 @@
  * Date: 05.06.18
  * Time: 14:12
  */
-include( "Parser.php" );
-include( "Model/Security.php" );
-include( "Model/UploadImage.php" );
+require_once( "Parser.php" );
+require_once( "Model/Security.php" );
+require_once( "Model/UploadImage.php" );
 
 class Controller {
 
@@ -22,18 +22,26 @@ class Controller {
 
 		$model               = new ModelBase( $db );
 		$model->crsfSecurity = new Security();
-		$viewModal = false;
+		$viewModal           = false;
 
 		if ( ! empty( $_POST ) ) {
 			if ( $model->crsfSecurity->validateCrsf() ) {
 				$model->load();
 				$image = new UploadImage( $model );
-				$model->save();
+
+
+				if ( $model->save() === true ) {
+					return Parser::render( "views/profile.php", [ $model ], true );
+				}
+
+
 			} else {
+				//обновление crsf и вывод модального для пользователя
 				$model->crsfSecurity->updateCrsf();
 				$viewModal = true;
 			}
 		}
+
 //		var_dump($model);
 
 		return Parser::render( "views/form.php", [ $model, $viewModal ], true );

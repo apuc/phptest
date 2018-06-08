@@ -6,8 +6,8 @@
  * Time: 13:25
  */
 
-include( "DB/ActiveRecord.php" );
-include( "Model/Language.php" );
+require_once( "DB/ActiveRecord.php" );
+require_once( "Model/Language.php" );
 //include ("Model/Security.php");
 
 /**
@@ -312,7 +312,7 @@ class ModelBase {
 			$query  = ActiveRecord::find()->select( "*" )->table( $this->db->getTable() )->where( [ $argument => $this->$argument ] )->getQuery();
 			$result = $this->db->getMysql()->query( $query )->fetch_all();
 			if ( ! empty( $result ) ) {
-				$this->errors[ $argument ] = Language::trl( $language, "Ошибка в значении {'{$this->getLabels($argument)}'}. Значение <{$this->$argument}> уже существует", true, true );
+				$this->errors[ $argument ] = Language::trl( $language, "Ошибка в значении {'{$this->getLabels($argument)}'}. Значение <{$this->$argument}> уже существует. Введите другое значение.", true, true );
 
 				return false;
 
@@ -360,6 +360,44 @@ class ModelBase {
 		foreach ( $_POST as $key => $item ) {
 			$this->$key = $item;
 		}
+	}
+
+
+	/**
+	 * возвращает вид образования
+	 *
+	 * @param null|int $idEducation
+	 *
+	 * @return array|mixed
+	 */
+	public function getEducation( $idEducation = null ) {
+		$education = [
+			"Cреднее ( общее ) образование",
+			"Cреднее ( полное ) образование",
+			"Cреднее ( профессиональное ) образование",
+			"Бакалавриат высшего образования",
+			"Магистратура"
+		];
+
+		return isset( $education[ $idEducation ] ) ? $education[ $idEducation ] : $education;
+	}
+
+	/**
+	 * возвращает статус семейного положения
+	 *
+	 * @param null|int $id
+	 *
+	 * @return array|mixed
+	 */
+	public function getMartialStatus( $id = null ) {
+		$martialStatus = [
+			"Не замужем/не женат",
+			"Разведен/разведена",
+			"Замужем/женат",
+			"Состою в гражданском браке"
+		];
+
+		return isset( $martialStatus[ $id ] ) ? $martialStatus[ $id ] : $martialStatus;
 	}
 
 }

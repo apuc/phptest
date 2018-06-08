@@ -6,7 +6,7 @@
  * Time: 14:16
  */
 
-include ("ModelBase.php");
+require_once ("ModelBase.php");
 
 class ModelForm extends ModelBase {
 

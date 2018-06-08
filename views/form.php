@@ -13,6 +13,16 @@ global $language;
 global $defaultLanguage;
 $model     = $data[0];
 $viewModal = $data[1];
+
+
+if ( $language == $defaultLanguage ) {
+	$url = "/?lang=en";
+
+} else {
+	$language = "en";
+	$url      = "/?lang=ru";
+}
+
 ?>
 <!doctype html>
 <html lang="ru">
@@ -23,17 +33,18 @@ $viewModal = $data[1];
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <title>Document</title>
+    <title>Форма регистрации</title>
 </head>
 <body>
-<form id="form" role="form" action="../index.php" method="post" class="needs-validation" novalidate
+<form id="form" role="form" action="../index.php?lang=<?= $language ?>" method="post" class="needs-validation form-registration"
+      novalidate
       enctype="multipart/form-data">
     <div class="container">
         <div class="row">
             <input type="hidden" name="crsf" value="<?= $model->crsfSecurity->getCrsf() ?>">
             <div class="form-group col-md-4">
                 <label for="first_name"><?= $model->getLabels( "first_name" ) ?></label>
-                <input name="first_name" type="text" class="form-control"
+                <input name="first_name" type="text" class="form-control border-radius form-registration_input"
                        value="<?= $model->first_name ?>" required/>
                 <div class="invalid-feedback">
 
@@ -44,7 +55,7 @@ $viewModal = $data[1];
 
             <div class="form-group col-md-4">
                 <label for="last_name"><?= $model->getLabels( "last_name" ) ?></label>
-                <input name="last_name" type="text" class="form-control"
+                <input name="last_name" type="text" class="form-control border-radius form-registration_input"
                        value="<?= $model->last_name ?>" required/>
                 <div class="invalid-feedback">
 					<?= Language::trl( $language, "Поле {" . $model->getLabels( "last_name" ) . "} обязательно для заполнения" ) ?>
@@ -53,7 +64,7 @@ $viewModal = $data[1];
 
             <div class="form-group col-md-4">
                 <label for="patronymic"><?= $model->getLabels( "patronymic" ) ?></label>
-                <input name="patronymic" type="text" class="form-control"
+                <input name="patronymic" type="text" class="form-control border-radius form-registration_input"
                        value="<?= $model->patronymic ?>" required/>
                 <div class="invalid-feedback">
 					<?= Language::trl( $language, "Поле {" . $model->getLabels( "patronymic" ) . "} обязательно для заполнения" ) ?>
@@ -62,7 +73,7 @@ $viewModal = $data[1];
 
             <div class="form-group col-md-4">
                 <label for="year_of_birth"><?= $model->getLabels( "year_of_birth" ) ?></label>
-                <input name="year_of_birth" type="date" class="form-control"
+                <input name="year_of_birth" type="date" class="form-control border-radius form-registration_input"
                        value="<?= $model->year_of_birth ?>" required/>
                 <div class="invalid-feedback">
 					<?= Language::trl( $language, "Поле {" . $model->getLabels( "year_of_birth" ) . "} обязательно для заполнения" ) ?>
@@ -74,13 +85,14 @@ $viewModal = $data[1];
                 <!--<input name="marital_status" type="text" class="form-control"
                    value="<? /*= $model->marital_status */ ?>" required/>-->
 
-                <select name="marital_status" class="form-control" required>
-                    <option value="1">Не замужем/не женат</option>
-                    <option value="2">Разведен/разведена</option>
-                    <option value="3">Замужем/женат</option>
-                    <option value="4">Состою в гражданском браке</option>
-                </select>
+                <div class="select-div">
+                    <select name="marital_status" class="form-control border-radius form-registration_input" required>
 
+						<?php foreach ( $model->getMartialStatus() as $key => $value ): ?>
+                            <option value="<?= $key ?>"><?= $value ?></option>
+						<?php endforeach; ?>
+                    </select>
+                </div>
                 <div class="invalid-feedback">
 					<?= Language::trl( $language, "Поле {" . $model->getLabels( "marital_status" ) . "} обязательно для заполнения" ) ?>
                 </div>
@@ -88,7 +100,7 @@ $viewModal = $data[1];
 
             <div class="form-group col-md-4">
                 <label for="place_of_residence"><?= $model->getLabels( "place_of_residence" ) ?></label>
-                <input name="place_of_residence" type="text" class="form-control"
+                <input name="place_of_residence" type="text" class="form-control border-radius form-registration_input"
                        value="<?= $model->place_of_residence ?>" required/>
                 <div class="invalid-feedback">
 					<?= Language::trl( $language, "Поле {" . $model->getLabels( "place_of_residence" ) . "} обязательно для заполнения" ) ?>
@@ -100,13 +112,13 @@ $viewModal = $data[1];
                 <!--            <input name="education" type="text" class="form-control"-->
                 <!--                   value="<? //= $model->education ?>--><!--" required/>-->
 
-                <select name="education" class="form-control" required>
-                    <option value="1">среднее ( общее ) образование</option>
-                    <option value="2">среднее ( полное ) образование</option>
-                    <option value="3">среднее ( профессиональное ) образование</option>
-                    <option value="4">бакалавриат высшего образования</option>
-                    <option value="5">магистратура</option>
-                </select>
+                <div class="select-div">
+                    <select name="education" class="form-control border-radius form-registration_input" required>
+						<?php foreach ( $model->getEducation() as $key => $value ): ?>
+                            <option value="<?= $key ?>"><?= $value ?></option>
+						<?php endforeach; ?>
+                    </select>
+                </div>
 
 
                 <div class="invalid-feedback">
@@ -116,7 +128,7 @@ $viewModal = $data[1];
 
             <div class="col-md-4">
                 <label for="experience"><?= $model->getLabels( "experience" ) ?></label>
-                <input name="experience" type="text" class="form-control"
+                <input name="experience" type="text" class="form-control border-radius form-registration_input"
                        value="<?= $model->experience ?>" required/>
                 <div class="invalid-feedback">
 					<?= Language::trl( $language, "Поле {" . $model->getLabels( "experience" ) . "} обязательно для заполнения" ) ?>
@@ -126,7 +138,7 @@ $viewModal = $data[1];
             <div class="form-group col-md-4">
                 <label for="phone"><?= $model->getLabels( "phone" ) ?></label>
                 <input name="phone" type="text"
-                       class="form-control <?php if ( $model->isError( "phone" ) ): ?>form-control-invalid<?php endif; ?>"
+                       class="form-control border-radius form-registration_input <?php if ( $model->isError( "phone" ) ): ?>form-control-invalid<?php endif; ?>"
                        min="16"
                        value="<?= ( $model->isError( "phone" ) ) ? "" : $model->phone ?>"/>
                 <div class="invalid-feedback">
@@ -142,7 +154,7 @@ $viewModal = $data[1];
             <div class="form-group col-md-4">
                 <label for="email"><?= $model->getLabels( "email" ) ?></label>
                 <input name="email" type="email"
-                       class="form-control <?php if ( $model->isError( "email" ) ): ?>form-control-invalid<?php endif; ?>"
+                       class="form-control border-radius form-registration_input <?php if ( $model->isError( "email" ) ): ?>form-control-invalid<?php endif; ?>"
                        value="<?= $model->email ?>"/>
                 <div class="invalid-feedback">
 
@@ -156,7 +168,8 @@ $viewModal = $data[1];
 
             <div class="form-group col-md-4">
                 <label for="information_about_yourself"><?= $model->getLabels( "information_about_yourself" ) ?></label>
-                <input name="information_about_yourself" type="text" class="form-control"
+                <input name="information_about_yourself" type="text"
+                       class="form-control border-radius form-registration_input"
                        value="<?= $model->information_about_yourself ?>" required/>
                 <div class="invalid-feedback">
 					<?= Language::trl( $language, "Поле {" . $model->getLabels( "information_about_yourself" ) . "} обязательно для заполнения" ) ?>
@@ -164,36 +177,35 @@ $viewModal = $data[1];
             </div>
             <div class="form-group col-md-4">
                 <label for="file"><?= $model->getLabels( "image" ) ?></label>
-                <input name="file" type="file"
-                       class="form-control <?php if ( $model->isError( "imageFile" ) ): ?>form-control-invalid<?php endif; ?>"/>
-				<?php if ( $model->isError( "imageFile" ) ): ?>
-                    <div class="invalid-feedback">
-						<?= $model->getError( "imageFile" ) ?>
-                    </div>
-				<?php endif; ?>
+                <input name="file" type="file" required
+                       class="form-control border-radius form-registration_input <?php if ( $model->isError( "imageFile" ) ): ?>form-control-invalid<?php endif; ?>"/>
+
+                <div class="invalid-feedback">
+					<?php if ( $model->isError( "imageFile" ) ): ?>
+						<?= trim( $model->getError( "imageFile" ) ) ?>
+					<?php else: ?>
+						<?= Language::trl( $language, "Поле {" . $model->getLabels( "imageFile" ) . "} обязательно для заполнения" ) ?>
+					<?php endif; ?>
+                </div>
+
             </div>
 
 
         </div>
-        <div class="form-group">
-            <input type="submit" class="btn btn-info" value="Отправить"/>
-			<?php if ( $language == $defaultLanguage ): ?>
-                <a href="/?lang=en" class="btn btn-primary">Переключить на английский</a>
-			<?php else: ?>
-				<?php $language = "en" ?>
-                <a href="/?lang=ru" class="btn btn-primary">Переключить на русский</a>
-			<?php endif; ?>
+        <div class="form-group text-center">
+            <input type="submit" class="btn btn-info border-radius" value="Отправить"/>
+
+            <a href="<?= $url ?>" class="btn btn-primary border-radius">
+				<?php if ( $language == $defaultLanguage ) {
+					echo "Переключить на английский";
+
+				} else {
+					echo "Переключить на русский";
+				} ?>
+            </a>
         </div>
     </div>
 </form>
-
-<!--<div class="container">
-    <div class="row">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-            Launch demo modal
-        </button>
-    </div>
-</div>-->
 
 
 <!-- Modal -->
@@ -336,6 +348,43 @@ $viewModal = $data[1];
     .form-control-invalid {
         border: 1px solid #dc3545;
     }
+
+    .form-registration_input {
+        background-color: #eff0f4;
+
+    }
+
+    .border-radius {
+        border-radius: 20px;
+    }
+
+    .select-div {
+        position: relative;
+
+    }
+
+    .select-div::before {
+        content: ">";
+        position: absolute;
+        right: 20px;
+        transform: rotate(90deg);
+        top: 5px;
+        z-index: 20;
+    }
+
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        position: relative;
+    }
+
+    @media (max-width: 349px) {
+        input[type=submit] {
+            margin-bottom: 15px;
+        }
+    }
+
 </style>
 
 </body>

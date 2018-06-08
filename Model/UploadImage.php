@@ -101,7 +101,7 @@ class UploadImage {
 	 * @param ModelBase $model
 	 */
 	private function saveFile( ModelBase $model ) {
-		if ( ! @copy( $_FILES['file']['tmp_name'], $this->getSrcSaveFile() ) ) {
+		if ( ! @copy( $_FILES['file']['tmp_name'], $this->getSrcSaveFile()) ) {
 			$model->addError( "imageFile", "Ошибка сохранения файла" );
 		}
 	}

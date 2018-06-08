@@ -14,7 +14,7 @@
  */
 
 
-include "Migrations.php";
+require_once "Migrations.php";
 
 class DB_Connection {
 
